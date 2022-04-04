@@ -20,4 +20,6 @@ The social contact data we used here is from the Social Contact Survey described
 5. Plot the results on a single figure 
 
 ## How to run the code
-All the code is contained in the file "limiting contacts_3by3_comments.R". You should be able to source the file and it will produce the 3-by-3 figure in the outputs directory. 
+The basic code is contained in the file "R/limiting contacts_3by3_comments.R". You should be able to source the file and it will produce the 3-by-3 figure in the outputs directory. 
+
+
