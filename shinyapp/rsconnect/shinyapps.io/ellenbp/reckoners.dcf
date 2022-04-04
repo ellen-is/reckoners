@@ -1,0 +1,12 @@
+name: reckoners
+title: reckoners
+username:
+account: ellenbp
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3887585
+bundleId: 4413572
+url: https://ellenbp.shinyapps.io/reckoners/
+when: 1617141865.38881
+asMultiple: FALSE
+asStatic: FALSE
