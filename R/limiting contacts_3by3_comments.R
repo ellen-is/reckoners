@@ -8,6 +8,7 @@
 library(tidyverse)
 library(boot)
 
+
 # DATA SET UP ---------------------------------
 
 #1. load Social Contact Survey data
@@ -100,12 +101,12 @@ degreeperson0 = function(contactsperson,inf_child,CTF1)
 
 # calibrate to no social distancing
 
-
+#relative infectiousness of children under 11
+infchild=1
 #call degreeperson0 once to calculate degree per person
 degall=degreeperson0(contactsperson,infchild,0.0)
 
-#relative infectiousness of children under 11
-infchild=1
+
 
 #starting average R0
 meanR0=2.8
