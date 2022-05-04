@@ -82,19 +82,19 @@ ui <- fluidPage(
 
     # Sidebar with a slider input for number of bins 
     fluidRow(
-        column(4,
+        column(2, #changed from 4 to 2 when commeted out the ve_inf and ve_trans
                h3("Vaccination parameters:"),
             selectInput('agegroup', 'Eligible age groups:', paste(seq(65,5,-5),"+",sep="")),
-            sliderInput("ve_inf",
+            #sliderInput("ve_inf",
                         "Vaccine effectiveness against infection:",
-                        min = 0,
-                        max = 1,
-                        value = 0.6),
-            sliderInput("ve_trans",
+             #           min = 0,
+              #          max = 1,
+               #         value = 0.6),
+          #  sliderInput("ve_trans",
                         "Vaccine effectiveness against transmission:",
-                        min = 0,
-                        max = 1,
-                        value = 0.5),
+           #             min = 0,
+            #            max = 1,
+             #           value = 0.5),
             sliderInput("uptake1",
                         "Vaccine uptake in low risk groups:",
                         min = 0,
@@ -121,11 +121,11 @@ fluidRow(
                        min = 0,
                        max = 1,
                        value = 0.25),
-           sliderInput("infchild",
-                       "Relative infectiousness of under 11s:",
-                       min = 0,
-                       max = 1,
-                       value = 0.25),
+           #sliderInput("infchild",
+              #         "Relative infectiousness of under 11s:",
+            #           min = 0,
+             #          max = 1,
+              #         value = 0.25),
            style="overflow-x: scroll; overflow-y: scroll"),
     column(8,offset=0,
            h3(" ", style="padding:20px;"),
@@ -149,7 +149,7 @@ server <- function(input, output) {
     output$distPlot <- renderPlot({
         # generate bins based on input$bins from ui.R
         
-        degall=degreeperson0(contactsperson,input$infchild,min(1,2*input$infchild),CTF1=0.0)
+        degall=degreeperson0(contactsperson,0.25,min(1,2*0.25),CTF1=0.0) #replaced input$infchild with 0.25
         mult1=input$meanR0/(sum((degall$wcon^2)*degall$ageweight)/sum(degall$ageweight))
         
         uptake=seq(input$uptake1,0.98,length.out=max(contactsperson$age))
@@ -157,8 +157,8 @@ server <- function(input, output) {
 
         contactsperson %>%
             mutate(vaccinated = ifelse(age>=input$agegroup,uptake[age] + (1-uptake[age])*seroprevalence[age],seroprevalence[age])) %>%
-            mutate(vaccinemultiplier = sqrt(1 - input$ve_trans*vaccinated)) %>%
-            mutate(aw2 = (1-vaccinated*input$ve_inf)*ageweight) -> contactsperson
+            mutate(vaccinemultiplier = sqrt(1 - 0.5*vaccinated)) %>% #0.5 was input$ve_trans
+            mutate(aw2 = (1-vaccinated*0.6)*ageweight) -> contactsperson #0.6 was input$ve_inf
         
         Rt=matrix(0,nrow=length(COMP),ncol=3)
         Rt5611_noCT=matrix(0,nrow=length(COMP),ncol=3)
@@ -192,7 +192,7 @@ server <- function(input, output) {
                 contactsperson$comply[ixH]=0 #home contacts
                 
                 
-                degred=degreeperson(contactsperson,input$infchild,min(1,2*input$infchild),CTF1=input$CTF1/100,1-input$covidsec)
+                degred=degreeperson(contactsperson,0.25,min(1,2*0.25),CTF1=input$CTF1/100,1-input$covidsec) #replaced input$infchild with 0.25
                 rind=rbind(rind,cbind(degred$vaccinemultiplier*degred$wcon,degred$aw2))  
                 
                 ########NO CONTACT TRACING, 20% CONTACT TRACING, 60% CONTACT TRACING
@@ -207,7 +207,7 @@ server <- function(input, output) {
                 contactsperson$comply[ixtrans]=0
                 
                 
-                degred=degreeperson(contactsperson,input$infchild,min(1,2*input$infchild),CTF1=input$CTF1/100,1-input$covidsec)
+                degred=degreeperson(contactsperson,0.25,min(1,2*0.25),CTF1=input$CTF1/100,1-input$covidsec)#replaced input$infchild with 0.25
                 rind_5611=rbind(rind_5611,cbind(degred$vaccinemultiplier*degred$wcon,degred$aw2))
 
                 
@@ -221,7 +221,7 @@ server <- function(input, output) {
                 ixtrans=which((contactsperson$age<=11 & contactsperson$age>=5) & contactsperson$WorkSchool==1)
                 contactsperson$comply[ixtrans]=0
                 
-                degred=degreeperson(contactsperson,input$infchild,min(1,2*input$infchild),CTF1=input$CTF1/100,1-input$covidsec)
+                degred=degreeperson(contactsperson,0.25,min(1,2*0.25),CTF1=input$CTF1/100,1-input$covidsec)#replaced input$infchild with 0.25
                 rind_primary=rbind(rind_primary,cbind(degred$vaccinemultiplier*degred$wcon,degred$aw2))
                 
                 
@@ -235,7 +235,7 @@ server <- function(input, output) {
                 ixtrans=which((contactsperson$age<=18 & contactsperson$age>=5) & contactsperson$WorkSchool==1)
                 contactsperson$comply[ixtrans]=0
                 
-                degred=degreeperson(contactsperson,input$infchild,min(1,2*input$infchild),CTF1=input$CTF1/100,1-input$covidsec)
+                degred=degreeperson(contactsperson,0.25,min(1,2*0.25),CTF1=input$CTF1/100,1-input$covidsec)#replaced input$infchild with 0.25
                 rind_allschool=rbind(rind_allschool,cbind(degred$vaccinemultiplier*degred$wcon,degred$aw2))
                 
 
