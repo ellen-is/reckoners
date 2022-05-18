@@ -84,7 +84,7 @@ ui <- fluidPage(
     fluidRow(
         column(2, #changed from 4 to 2 when commeted out the ve_inf and ve_trans
                h3("Vaccination parameters:"),
-            selectInput('agegroup', 'Eligible age groups:', paste(seq(65,5,-5),"+",sep="")),
+            #selectInput('agegroup', 'Eligible age groups:', paste(seq(65,5,-5),"+",sep="")),
             #sliderInput("ve_inf",
               #          "Vaccine effectiveness against infection:",
              #           min = 0,
@@ -156,7 +156,7 @@ server <- function(input, output) {
         seroprevalence = rep(input$seroprev,max(contactsperson$age))
 
         contactsperson %>%
-            mutate(vaccinated = ifelse(age>=input$agegroup,uptake[age] + (1-uptake[age])*seroprevalence[age],seroprevalence[age])) %>%
+            mutate(vaccinated = ifelse(age>=5,uptake[age] + (1-uptake[age])*seroprevalence[age],seroprevalence[age])) %>%
             mutate(vaccinemultiplier = sqrt(1 - 0.5*vaccinated)) %>% #0.5 was input$ve_trans
             mutate(aw2 = (1-vaccinated*0.6)*ageweight) -> contactsperson #0.6 was input$ve_inf
         
